@@ -7,15 +7,13 @@ const fsPromises = fs.promises;
 module.exports = async (event, context) => {
   let d = new Date().getTime()
   let payload = event.body.toString('utf-8')
-  // console.log(d, event.headers)
-  // console.log(d, event.query)
-  // console.log(d, payload)
 
   let uri = await fsPromises.readFile("/var/openfaas/secrets/slack-url", "utf8")
   let sellerID = await fsPromises.readFile("/var/openfaas/secrets/seller-id", "utf8")
 
   var qs = require('querystring');
   var parts = qs.parse(payload)
+
   if(parts["seller_id"] == sellerID) {
     let m = {"text": `:moneybag: ${parts["product_name"]} (${parts["variants[]"]}) - ${parts.price/100}${parts.currency.toUpperCase()} by email ${parts.email} in ${parts["ip_country"]}`}
     let res = await axios({
@@ -29,6 +27,18 @@ module.exports = async (event, context) => {
   } else {
     console.log(d, `Incorrect seller ID`)
   }
+
+  if(parts.price/100 == 50) {
+    console.log(`Sending email to ${parts.email}`)
+
+    let res = await axios({
+      method: 'post',
+      url: process.env.gateway_url +"function/gumroad-upgrade",
+      data: JSON.stringify({"email": parts.email, "sellerID": parts["seller_id"]}),
+      headers: {"Content-Type": "application/json"}
+    })
+  }
+
   return context
     .status(200)
     .succeed("OK")

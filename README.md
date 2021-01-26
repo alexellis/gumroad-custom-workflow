@@ -1,6 +1,9 @@
-# gumroad-pings
+# Get webhooks into Slack every time you sell a product on Gumroad
 
-Get webhooks into Slack every time you sell a product on Gumroad
+This repo contains two functions which extend Gumroad with a custom workflow
+
+1) gumroad-pings - forwards messages to Slack to tell you about your sales
+2) gumroad-upgrade - use this to email customers an upgrade to a secret unlisted YouTube video or Gist for additional value
 
 ## Deployment
 
@@ -22,7 +25,7 @@ You can get the slack-url by creating an "incoming webhook" and creating a new c
 Deploy the function after creating the secrets:
 
 ```bash
-faas-cli deploy
+faas-cli deploy --filter gumroad-pings
 ```
 
 Now enter your function's URL on the Advanced tab in Gumroad's settings page, in the "Ping" field.
@@ -44,4 +47,63 @@ Why not?
 * Send them an automated invite to your Slack community
 * [Flash an LED on your Raspberry Pi](https://levelup.gitconnected.com/add-a-status-led-to-your-raspberry-pi-d3718846d66b)
 
-If you'd like to chat, you can reach out on [OpenFaaS Slack](https://slack.openfaas.io/)
+See the code for the [gumroad-pings](https://github.com/alexellis/gumroad-sales-forwarder/tree/main/gumroad-pings) function
+
+Feel free to customise the code, or reach out on [OpenFaaS Slack](https://slack.openfaas.io/)
+
+### Conditional emails
+
+The gumroad-upgrade function will "upgrade" customers on the 50USD tier by emailing them a link to a video course.
+
+You'll need to set up [AWS Simple Email Service (SES)](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/ses-examples-sending-email.html) or use an alternative like Sendgrid if you want this functionality in your own workflow.
+
+Create secrets for your AWS credentials:
+
+```bash
+export AWS_SES_TOKEN=""
+export AWS_SES_SECRET=""
+
+faas-cli secret create \
+ ses-access-key-id \
+ --from-literal "$AWS_SES_SECRET"
+
+faas-cli secret create \
+ ses-access-token \
+ --from-literal "$AWS_SES_TOKEN"
+```
+
+Create a secret for the URL that you want your customers to go to:
+
+```bash
+export SECRET_URL="https://github.com/sponsors/alexellis/"
+
+faas-cli secret create \
+ secret-url \
+ --from-literal "$SECRET_URL"
+```
+
+Customise the email templates in the gumroad-upgrade/emails/ folder - edit the message.html and message.txt so your users can receive both plaintext and HTML.
+
+Update the environment variables for your emails and the AWS region if you're using SES
+
+```yaml
+    environment:
+      subject: "Your bonus upgrade to my video workshop"
+      sender: sales@openfaas.com
+      region: "eu-west-1"
+```
+
+See the code for the [gumroad-upgrade](https://github.com/alexellis/gumroad-sales-forwarder/tree/main/gumroad-pings) function
+
+## Sending emails
+
+```bash
+curl http://192.168.0.15:8080/function/gumroad-upgrade \
+ --data-binary '{"email": "alex@openfaas.com"}' \
+ -H "Content-type: application/json"
+```
+
+## Copyright & License
+
+MIT license, copyright [OpenFaaS Ltd](https://openfaas.com/)
+

@@ -10,6 +10,20 @@ functions:
     image: alexellis2/gumroad-pings:0.1.1
     environment:
       RAW_BODY: true
+      gateway_url: http://10.62.0.1:8080/
     secrets:
     - slack-url
+    - seller-id
+
+  gumroad-upgrade:
+    lang: node12
+    handler: ./gumroad-upgrade
+    image: alexellis2/gumroad-upgrade:0.1.1
+    environment:
+      subject: "Your bonus upgrade to my video workshop"
+      sender: sales@openfaas.com
+      region: "eu-west-1"
+    secrets:
+    - ses-access-key-id
+    - ses-access-token
     - seller-id
