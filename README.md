@@ -93,13 +93,19 @@ Update the environment variables for your emails and the AWS region if you're us
       region: "eu-west-1"
 ```
 
+Here's an example of the HTML message, which you can customise:
+
+![Sample email to customers](/docs/email-sample.png)
+
 See the code for the [gumroad-upgrade](https://github.com/alexellis/gumroad-sales-forwarder/tree/main/gumroad-pings) function
 
-## Sending emails
+Emails are de-duplicated to prevent you spamming your customers. You can disable this if you wish.
+
+### Sending test emails
 
 ```bash
-curl http://192.168.0.15:8080/function/gumroad-upgrade \
- --data-binary '{"email": "alex@openfaas.com"}' \
+curl http://127.0.0.1:8080/function/gumroad-upgrade \
+ --data-binary '{"email": "alex@openfaas.com", "sellerID": "SECRET"}' \
  -H "Content-type: application/json"
 ```
 
