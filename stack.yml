@@ -7,7 +7,7 @@ functions:
   gumroad-pings:
     lang: node12
     handler: ./gumroad-pings
-    image: alexellis2/gumroad-pings:0.1.1
+    image: alexellis2/gumroad-pings:0.1.4
     environment:
       RAW_BODY: true
       gateway_url: http://10.62.0.1:8080/
@@ -18,7 +18,7 @@ functions:
   gumroad-upgrade:
     lang: node12
     handler: ./gumroad-upgrade
-    image: alexellis2/gumroad-upgrade:0.1.1
+    image: alexellis2/gumroad-upgrade:0.1.4
     environment:
       subject: "Your bonus upgrade to my video workshop"
       sender: sales@openfaas.com
@@ -27,3 +27,4 @@ functions:
     - ses-access-key-id
     - ses-access-token
     - seller-id
+    - secret-url

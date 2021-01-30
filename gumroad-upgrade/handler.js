@@ -5,7 +5,7 @@ const { SESClient, SendEmailCommand } = require("@aws-sdk/client-ses");
 const fs = require('fs');
 const fsPromises = fs.promises;
 
-const REGION = process.env.REGION;
+const REGION = process.env.region;
 
 var seen = {}
 
@@ -74,7 +74,8 @@ module.exports = async (event, context) => {
   const run = async () => {
     try {
       const data = await ses.send(new SendEmailCommand(params));
-      console.log("Success", data);
+
+      console.log(`Success with ${toEmail}`, data);
     } catch (err) {
       console.log("Error", err);
     }

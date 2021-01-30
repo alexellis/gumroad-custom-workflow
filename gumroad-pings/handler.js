@@ -28,15 +28,21 @@ module.exports = async (event, context) => {
     console.log(d, `Incorrect seller ID`)
   }
 
-  if(parts.price/100 == 50) {
+  let paid = parts.price/100
+  let upgrades = [40, 50]
+  if(upgrades.includes(paid)) {
     console.log(`Sending email to ${parts.email}`)
 
-    let res = await axios({
-      method: 'post',
-      url: process.env.gateway_url +"function/gumroad-upgrade",
-      data: JSON.stringify({"email": parts.email, "sellerID": parts["seller_id"]}),
-      headers: {"Content-Type": "application/json"}
-    })
+    try {
+      let res = await axios({
+        method: 'post',
+        url: process.env.gateway_url +"function/gumroad-upgrade",
+        data: JSON.stringify({"email": parts.email, "sellerID": parts["seller_id"]}),
+        headers: {"Content-Type": "application/json"}
+      })
+    } catch (error) {
+      console.error(parts.email, Object.keys(error), error.message, error.response.status, error.response.data);
+    }
   }
 
   return context
