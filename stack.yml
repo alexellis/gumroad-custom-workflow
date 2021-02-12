@@ -7,10 +7,11 @@ functions:
   gumroad-pings:
     lang: node12
     handler: ./gumroad-pings
-    image: alexellis2/gumroad-pings:0.1.4
+    image: alexellis2/gumroad-pings:0.1.5
     environment:
       RAW_BODY: true
       gateway_url: http://10.62.0.1:8080/
+      promotion_end_date: '2021-02-13T00:00:00.000Z'
     secrets:
     - slack-url
     - seller-id

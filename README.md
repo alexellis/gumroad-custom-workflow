@@ -22,6 +22,16 @@ faas-cli secret create slack-url --from-literal "https://hooks.slack.com/service
 
 You can get the slack-url by creating an "incoming webhook" and creating a new channel for the messages, or using an existing one.
 
+Set an end-date for your offer in the `promotion_end_date` environment variable, if you don't know what date to set, make the date very far into the future.
+
+```yaml
+  gumroad-pings:
+...
+    environment:
+...
+      promotion_end_date: '2021-02-13T00:00:00.000Z'
+```
+
 Deploy the function after creating the secrets:
 
 ```bash
