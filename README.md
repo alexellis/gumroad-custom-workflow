@@ -119,6 +119,12 @@ curl http://127.0.0.1:8080/function/gumroad-upgrade \
  -H "Content-type: application/json"
 ```
 
+### Publish cross-platform images
+
+```bash
+faas-cli publish --platforms linux/arm/v7
+```
+
 ## Copyright & License
 
 MIT license, copyright [OpenFaaS Ltd](https://openfaas.com/)
