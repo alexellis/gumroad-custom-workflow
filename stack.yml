@@ -11,7 +11,7 @@ functions:
     environment:
       RAW_BODY: true
       gateway_url: http://10.62.0.1:8080/
-      promotion_end_date: '2021-02-23T09:00:00.000Z'
+      promotion_end_date: '2021-02-27T12:00:00.000Z'
     secrets:
     - slack-url
     - seller-id
