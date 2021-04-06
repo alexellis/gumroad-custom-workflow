@@ -18,7 +18,7 @@ module.exports = async (event, context) => {
   var parts = qs.parse(payload)
 
   if(parts["seller_id"] == sellerID) {
-    let m = {"text": `:moneybag: ${parts["product_name"]} (${parts["variants[]"]}) - ${parts.price/100}${parts.currency.toUpperCase()} by email ${parts.email} in ${parts["ip_country"]}`}
+    let m = {"text": `:moneybag: ${parts["product_name"]} (${parts["short_product_id"]}) (${parts["variants[]"]}) - ${parts.price/100}${parts.currency.toUpperCase()} by email ${parts.email} in ${parts["ip_country"]}`}
     let res = await axios({
       method: 'post',
       url: uri.toString(),
@@ -32,8 +32,15 @@ module.exports = async (event, context) => {
   }
 
   let paid = parts.price/100
+
+  // 50 USD is the qualifying tier for the offer, but 40 USD is
+  // for when people use a 20% off discount code.
   let upgrades = [40, 50]
-  if(upgrades.includes(paid)) {
+
+  // Don't apply the promotion email to every product of this price.
+  var desiredShortProductID = process.env.short_product_id;
+  var shortProductID = parts["short_product_id"]
+  if(desiredShortProductID == shortProductID && upgrades.includes(paid)) {
     if(moment().isBefore(moment(endDate))) {
       console.log(`Sending email to: ${parts.email}`)
 
