@@ -35,11 +35,14 @@ module.exports = async (event, context) => {
 
   // 50 USD is the qualifying tier for the offer, but 40 USD is
   // for when people use a 20% off discount code.
-  let upgrades = [40, 50]
+  // The 60 USD price could also be used at times resulting in
+  // 48USD from a 20% discount for insiders.
+  let upgrades = [40, 50, 48, 60]
 
   // Don't apply the promotion email to every product of this price.
   var desiredShortProductID = process.env.short_product_id;
   var shortProductID = parts["short_product_id"]
+
   if(desiredShortProductID == shortProductID && upgrades.includes(paid)) {
     if(moment().isBefore(moment(endDate))) {
       console.log(`Sending email to: ${parts.email}`)

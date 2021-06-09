@@ -123,6 +123,17 @@ curl http://127.0.0.1:8080/function/gumroad-upgrade \
 
 ```bash
 faas-cli publish --platforms linux/arm/v7
+
+faas-cli publish --platforms linux/arm/v7 \
+  --filter gumroad-pings
+```
+
+Deploy:
+
+```bash
+export OPENFAAS_URL=http://192.168.0.15:8080
+faas-cli deploy
+faas-cli deploy --filter gumroad-pings
 ```
 
 ## Copyright & License
