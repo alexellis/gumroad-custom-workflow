@@ -9,7 +9,7 @@ module.exports = async (event, context) => {
   let d = new Date().getTime()
   let payload = event.body.toString('utf-8')
 
-  let uri = await fsPromises.readFile("/var/openfaas/secrets/slack-url", "utf8")
+  let uri = await fsPromises.readFile("/var/openfaas/secrets/discord-url", "utf8")
   let sellerID = await fsPromises.readFile("/var/openfaas/secrets/seller-id", "utf8")
 
   let endDate = process.env.promotion_end_date
@@ -18,7 +18,21 @@ module.exports = async (event, context) => {
   var parts = qs.parse(payload)
 
   if(parts["seller_id"] == sellerID) {
-    let m = {"text": `:moneybag: ${parts["product_name"]} (${parts["short_product_id"]}) (${parts["variants[]"]}) - ${parts.price/100}${parts.currency.toUpperCase()} by email ${parts.email} in ${parts["ip_country"]}`}
+    let variant = "";
+    if(parts["variants[]"]){
+      variant = ` (${parts["variants[]"]}) `
+    }
+    let location = "";
+    if(parts["ip_country"]) {
+      location = ` from ${parts["ip_country"]}`;
+    }
+
+    let m = {
+      "username": "Jim",
+      "content": `:moneybag: ${parts["product_name"]} (${parts["short_product_id"]})${variant} - ${parts.price/100}${parts.currency.toUpperCase()} by ${parts.email}${location}`,
+      "avatar_url": "https://static.infofamouspeople.com/avatar/bn2si1j2a2a8tj7o1ct0_faces_rohn-jim-image.jpg"
+    }
+
     let res = await axios({
       method: 'post',
       url: uri.toString(),
@@ -26,7 +40,7 @@ module.exports = async (event, context) => {
       headers: {"Content-Type": "application/json"}
     })
 
-    console.log(d, `Slack status: ${res.status}`)
+    console.log(d, `Discord status: ${res.status}`)
   } else {
     console.log(d, `Incorrect seller ID`)
   }

@@ -17,10 +17,10 @@ Then clone this repo, and create the two secrets.
 
 ```bash
 faas-cli secret create seller-id --from-literal "GUMROAD_SELLER_ID"
-faas-cli secret create slack-url --from-literal "https://hooks.slack.com/services/X/Y/Z"
+faas-cli secret create discord-url --from-literal "https://hooks.slack.com/services/X/Y/Z"
 ```
 
-You can get the slack-url by creating an "incoming webhook" and creating a new channel for the messages, or using an existing one.
+You can get the discord-url by creating an "incoming webhook" and creating a new channel for the messages, or using an existing one.
 
 Set an end-date for your offer in the `promotion_end_date` environment variable, if you don't know what date to set, make the date very far into the future.
 
