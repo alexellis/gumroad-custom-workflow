@@ -1,9 +1,11 @@
-# Get webhooks into Slack every time you sell a product on Gumroad
+# Email your Gumroad customers and get notifications via Discord
 
 This repo contains two functions which extend Gumroad with a custom workflow
 
-1) gumroad-pings - forwards messages to Slack to tell you about your sales
+1) gumroad-pings - forwards messages to Discord to tell you about your sales
 2) gumroad-upgrade - use this to email customers an upgrade to a secret unlisted YouTube video or Gist for additional value
+
+Emails are sent via AWS SES and for low traffic, will stay within the free tier.
 
 ## Deployment
 
@@ -11,7 +13,7 @@ First of all, set up OpenFaaS using the open-source [faasd](http://github.com/op
 
 > My new eBook has step-by-step instructions on how to setup and configure faasd and may save you some time with configuration and setting up TLS: [Serverless For Everyone Else](https://gumroad.com/l/serverless-for-everyone-else).
 
-Then create an incoming webhook URL via [Slack's docs](https://api.slack.com/messaging/webhooks).
+Then create an incoming webhook URL via [Discord's docs](https://discord.com/developers/docs/resources/webhook).
 
 Then clone this repo, and create the two secrets.
 
@@ -53,13 +55,11 @@ Feel free to customise the code in the [handler.js](https://github.com/alexellis
 Why not?
 * Send new customers an email using SES or Sendgrid
 * Tweet a message to say thanks
-* Customise the message into the Slack channel
-* Send them an automated invite to your Slack community
+* Customise the message into the Discord channel
+* Send them an automated invite to your Discord community
 * [Flash an LED on your Raspberry Pi](https://levelup.gitconnected.com/add-a-status-led-to-your-raspberry-pi-d3718846d66b)
 
 See the code for the [gumroad-pings](https://github.com/alexellis/gumroad-sales-forwarder/tree/main/gumroad-pings) function
-
-Feel free to customise the code, or reach out on [OpenFaaS Slack](https://slack.openfaas.io/)
 
 ### Conditional emails
 
