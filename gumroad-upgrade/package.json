@@ -10,6 +10,8 @@
   "author": "OpenFaaS Ltd",
   "license": "MIT",
   "dependencies": {
-    "@aws-sdk/client-ses": "^3.3.0"
+    "@aws-sdk/client-ses": "^3.3.0",
+    "html-to-text": "^8.1.0",
+    "showdown": "^1.9.1"
   }
 }

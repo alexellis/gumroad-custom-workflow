@@ -20,9 +20,9 @@ functions:
   gumroad-upgrade:
     lang: node14
     handler: ./gumroad-upgrade
-    image: alexellis2/gumroad-upgrade:0.2.2
+    image: alexellis2/gumroad-upgrade:0.2.3
     environment:
-      subject: "Your bonus upgrade to my video workshop"
+      subject: "You've been upgraded to my workshop!"
       sender: sales@openfaas.com
       region: "eu-west-1"
     secrets:

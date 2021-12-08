@@ -4,21 +4,22 @@ const { SESClient, SendEmailCommand } = require("@aws-sdk/client-ses");
 
 const fs = require('fs');
 const fsPromises = fs.promises;
+const showdown = require('showdown')
+const mdConverter = new showdown.Converter()
+const textToHTML = require('html-to-text');
 
 const REGION = process.env.region;
 
 var seen = {}
 
 module.exports = async (event, context) => {
-
-  let htmlEmail = await fsPromises.readFile("function/emails/message.html", "utf8")
-  let textEmail = await fsPromises.readFile("function/emails/message.txt", "utf8")
+  let mdEmail = await fsPromises.readFile("function/emails/message.md", "utf8")
 
   let sellerID = await fsPromises.readFile("/var/openfaas/secrets/seller-id", "utf8")
   if(event.body.sellerID != sellerID) {
     return context
-    .status(500)
-    .succeed(`Bad request`)
+    .status(403)
+    .succeed(`Forbidden`)
   }
 
   let accessKeyId = await fsPromises.readFile("/var/openfaas/secrets/ses-access-key-id", "utf8")
@@ -37,6 +38,14 @@ module.exports = async (event, context) => {
   }
   seen[toEmail] = 1
 
+  mdEmail = mdEmail.replace("SECRET_URL", secretURL)
+
+  let htmlEmail = mdConverter.makeHtml(mdEmail)
+  let textEmail = textToHTML.convert(htmlEmail, {
+    wordwrap: 130,
+    uppercaseHeadings: false,
+    linkBrackets: false})
+
   // Set the parameters
   const params = {
     Destination: {
@@ -50,11 +59,11 @@ module.exports = async (event, context) => {
       Body: {
         Html: {
           Charset: "UTF-8",
-          Data: htmlEmail.replace("SECRET_URL", secretURL),
+          Data: htmlEmail,
         },
         Text: {
           Charset: "UTF-8",
-          Data: textEmail.replace("SECRET_URL", secretURL),
+          Data: textEmail,
         },
       },
       Subject: {
@@ -85,6 +94,6 @@ module.exports = async (event, context) => {
 
   return context
     .status(200)
-    .succeed(`Sent to ${toEmail}`)
+    .succeed(`Emailed: ${toEmail}`)
 }
 
