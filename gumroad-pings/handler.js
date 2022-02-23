@@ -17,37 +17,44 @@ module.exports = async (event, context) => {
   var qs = require('querystring');
   var parts = qs.parse(payload)
 
-  if(parts["seller_id"] == sellerID) {
-    let variant = "";
-    if(parts["variants[]"]){
-      variant = ` (${parts["variants[]"]}) `
-    }
-    let location = "";
-    if(parts["ip_country"]) {
-      location = ` from ${parts["ip_country"]}`;
-    }
-    let recurring = ""
-    if(parts["is_recurring_charge"]) {
-      recurring = ` (recurring)`
-    }
+  if(!parts["seller_id"] == sellerID) {
+    console.log(d, `Incorrect seller_id`)
 
-    let m = {
-      "username": "Jim",
-      "content": `:moneybag: ${parts["product_name"]} (${parts["short_product_id"]})${variant}${recurring} - ${parts.price/100}${parts.currency.toUpperCase()} by ${parts.email}${location}`,
-      "avatar_url": "https://static.infofamouspeople.com/avatar/bn2si1j2a2a8tj7o1ct0_faces_rohn-jim-image.jpg"
-    }
-
-    let res = await axios({
-      method: 'post',
-      url: uri.toString(),
-      data: JSON.stringify(m),
-      headers: {"Content-Type": "application/json"}
-    })
-
-    console.log(d, `Discord status: ${res.status}`)
-  } else {
-    console.log(d, `Incorrect seller ID`)
+    return context
+    .status(202)
+    .succeed("OK")
   }
+
+  // Handle discord message
+  let variant = "";
+  if(parts["variants[]"]){
+    variant = ` (${parts["variants[]"]}) `
+  }
+  let location = "";
+  if(parts["ip_country"]) {
+    location = ` from ${parts["ip_country"]}`;
+  }
+  let recurring = ""
+  if(parts["is_recurring_charge"]) {
+    recurring = ` (recurring)`
+  }
+
+  let m = {
+    "username": "Jim",
+    "content": `:moneybag: ${parts["product_name"]} (${parts["short_product_id"]})${variant}${recurring} - ${parts.price/100}${parts.currency.toUpperCase()} by ${parts.email}${location}`,
+    "avatar_url": "https://static.infofamouspeople.com/avatar/bn2si1j2a2a8tj7o1ct0_faces_rohn-jim-image.jpg"
+  }
+
+  let res = await axios({
+    method: 'post',
+    url: uri.toString(),
+    data: JSON.stringify(m),
+    headers: {"Content-Type": "application/json"}
+  })
+
+  console.log(d, `Discord status: ${res.status}`)
+
+  // Handle email upgrade
 
   let paid = parts.price/100
 
