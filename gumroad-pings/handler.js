@@ -26,10 +26,14 @@ module.exports = async (event, context) => {
     if(parts["ip_country"]) {
       location = ` from ${parts["ip_country"]}`;
     }
+    let recurring = ""
+    if(parts["is_recurring_charge"]) {
+      recurring = ` (recurring)`
+    }
 
     let m = {
       "username": "Jim",
-      "content": `:moneybag: ${parts["product_name"]} (${parts["short_product_id"]})${variant} - ${parts.price/100}${parts.currency.toUpperCase()} by ${parts.email}${location}`,
+      "content": `:moneybag: ${parts["product_name"]} (${parts["short_product_id"]})${variant}${recurring} - ${parts.price/100}${parts.currency.toUpperCase()} by ${parts.email}${location}`,
       "avatar_url": "https://static.infofamouspeople.com/avatar/bn2si1j2a2a8tj7o1ct0_faces_rohn-jim-image.jpg"
     }
 
@@ -51,7 +55,7 @@ module.exports = async (event, context) => {
   // for when people use a 20% off discount code.
   // The 60 USD price could also be used at times resulting in
   // 48USD from a 20% discount for insiders.
-  let upgrades = [40, 50, 48, 60]
+  let upgrades = [40, 50, 48, 60, 59]
 
   // Don't apply the promotion email to every product of this price.
   var desiredShortProductID = process.env.short_product_id;

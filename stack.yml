@@ -7,11 +7,11 @@ functions:
   gumroad-pings:
     lang: node14
     handler: ./gumroad-pings
-    image: alexellis2/gumroad-pings:0.4.1
+    image: alexellis2/gumroad-pings:0.4.4
     environment:
       RAW_BODY: true
       gateway_url: http://10.62.0.1:8080/
-      promotion_end_date: '2021-12-1412:00:00.000Z'
+      promotion_end_date: '2022-02-28 12:00:00.000Z'
       short_product_id: fKOcw
     secrets:
     - discord-url
