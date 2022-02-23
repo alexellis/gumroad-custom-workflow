@@ -7,7 +7,7 @@ functions:
   gumroad-pings:
     lang: node14
     handler: ./gumroad-pings
-    image: alexellis2/gumroad-pings:0.4.4
+    image: alexellis2/gumroad-pings:0.5.1
     environment:
       RAW_BODY: true
       gateway_url: http://10.62.0.1:8080/

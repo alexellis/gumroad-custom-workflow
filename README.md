@@ -124,7 +124,7 @@ curl http://127.0.0.1:8080/function/gumroad-upgrade \
 ```bash
 faas-cli publish --platforms linux/arm/v7
 
-faas-cli publish --platforms linux/arm/v7 \
+faas-cli publish --platforms linux/amd64,linux/arm64,linux/arm/v7 \
   --filter gumroad-pings
 ```
 

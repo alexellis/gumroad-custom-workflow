@@ -17,8 +17,8 @@ module.exports = async (event, context) => {
   var qs = require('querystring');
   var parts = qs.parse(payload)
 
-  if(!parts["seller_id"] == sellerID) {
-    console.log(d, `Incorrect seller_id`)
+  if(parts["seller_id"] != sellerID) {
+    console.log(`Incorrect seller_id`)
 
     return context
     .status(202)
@@ -52,7 +52,7 @@ module.exports = async (event, context) => {
     headers: {"Content-Type": "application/json"}
   })
 
-  console.log(d, `Discord status: ${res.status}`)
+  console.log(`Discord status: ${res.status}`)
 
   // Handle email upgrade
 
@@ -70,6 +70,7 @@ module.exports = async (event, context) => {
 
   if(desiredShortProductID == shortProductID && upgrades.includes(paid)) {
     if(moment().isBefore(moment(endDate))) {
+
       console.log(`Sending email to: ${parts.email}`)
 
       try {
