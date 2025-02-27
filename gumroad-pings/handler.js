@@ -42,7 +42,7 @@ module.exports = async (event, context) => {
   let m = {
     "username": "Jim",
     "content": `:moneybag: ${parts["product_name"]} (${parts["short_product_id"]})${variant}${recurring} - ${parts.price/100}${parts.currency.toUpperCase()} by ${parts.email}${location}`,
-    "avatar_url": "https://static.infofamouspeople.com/avatar/bn2si1j2a2a8tj7o1ct0_faces_rohn-jim-image.jpg"
+    "avatar_url": "https://pbs.twimg.com/profile_images/668514224264491009/PLhKuZ4H_400x400.jpg"
   }
 
   let res = await axios({
