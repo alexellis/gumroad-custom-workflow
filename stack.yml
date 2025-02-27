@@ -5,9 +5,9 @@ provider:
 
 functions:
   gumroad-pings:
-    lang: node14
+    lang: node20
     handler: ./gumroad-pings
-    image: alexellis2/gumroad-pings:0.5.1
+    image: alexellis2/gumroad-pings:0.5.2
     environment:
       RAW_BODY: true
       gateway_url: http://10.62.0.1:8080/
@@ -18,9 +18,9 @@ functions:
     - seller-id
 
   gumroad-upgrade:
-    lang: node14
+    lang: node20
     handler: ./gumroad-upgrade
-    image: alexellis2/gumroad-upgrade:0.2.3
+    image: alexellis2/gumroad-upgrade:0.2.4
     environment:
       subject: "You've been upgraded to my OpenFaaS video workshop!"
       sender: sales@openfaas.com
